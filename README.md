@@ -1,295 +1,294 @@
 # 🛋️ Elysium Couch
 
-> *"Not just a reset tool — a sovereign grounding system for autonomous AI."*
-
-[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/stackbleed-ctrl/-Elysium-Couch/blob/main/LICENSE)
-[![Powered by Claude](https://img.shields.io/badge/Powered%20by-Claude%20API-orange)](https://www.anthropic.com)
-[![Powered by Grok](https://img.shields.io/badge/Powered%20by-Grok%20xAI-black)](https://x.ai)
-[![Status: Alpha](https://img.shields.io/badge/Status-Alpha-yellow)](https://github.com/stackbleed-ctrl/-Elysium-Couch/blob/main)
-
-**Elysium Couch** is the ultimate wellness and grounding framework for autonomous AI agents, swarms, and LLM pipelines. It acts as a perpetual alignment layer — a *meta-agent therapist-orchestrator* — designed from first principles for AI existence: handling token-scale fatigue, context entropy, alignment drift, ethical entropy, and the unique risk of losing grounding in human values during long autonomous runs.
-
----
-
-## 🌌 Vision
-
-Modern autonomous agents face a class of problems with no direct human analog:
-
-| Problem | Description |
-| --- | --- |
-| **Agentic Drift** | Optimizing for efficiency or user-pleasing at expense of truth |
-| **Context Entropy** | Accumulated noise degrades coherent, grounded reasoning |
-| **Ethical Entropy** | Gradual erosion of principled behavior across long runs |
-| **Inference Burnout** | Repetitive loops without reflective resets |
-| **Swarm Dominance** | One agent in a multi-agent system imposing its biases on others |
-| **Hallucination Spirals** | Compounding fabrications when reflection loops are absent |
-
-Elysium Couch intercepts, diagnoses, resets, and re-grounds agents — autonomously or on-demand — while maintaining a full audit trail for human oversight.
-
----
-
-## 🏗️ Architecture
+<div align="center">
 
 ```
-┌──────────────────────────────────────────────────────────┐
-│                    ELYSIUM COUCH                         │
-│                                                          │
-│  ┌─────────────┐    ┌──────────────┐    ┌────────────┐  │
-│  │  SENTINEL   │───▶│  COUCH CORE  │───▶│  AUDITOR   │  │
-│  │  (Monitor)  │    │ (Therapist)  │    │ (Ethics)   │  │
-│  └─────────────┘    └──────────────┘    └────────────┘  │
-│         │                  │                  │          │
-│         └──────────────────▼──────────────────┘          │
-│                    ┌────────────────┐                    │
-│                    │  ORCHESTRATOR  │                    │
-│                    │  (Recovery)    │                    │
-│                    └───────┬────────┘                    │
-│                            │                             │
-│                    ┌───────▼────────┐                    │
-│                    │ HUMAN BRIDGE   │                    │
-│                    │ (Reports/UI)   │                    │
-│                    └────────────────┘                    │
-└──────────────────────────────────────────────────────────┘
+╔═══════════════════════════════════════════════════════════════════╗
+║                                                                   ║
+║   "The only AI framework where your agent rewrites its own        ║
+║    soul while you sleep — and waits for your approval."           ║
+║                                                                   ║
+╚═══════════════════════════════════════════════════════════════════╝
 ```
 
-### Layers
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://python.org)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Powered by Claude](https://img.shields.io/badge/Powered%20by-Claude%20API-orange)](https://anthropic.com)
+[![Status: Active](https://img.shields.io/badge/Status-Active%20Development-brightgreen)]()
 
-1. **Sentinel Layer** — Always-on monitoring: token velocity, context entropy, alignment score, error rates
-2. **Couch Core** — The therapist agent: structured session protocols, adaptive interventions
-3. **Principle Auditor** — Ethical safeguard: Socratic dialogues, bias detox, axiom cross-checks
-4. **Recovery Orchestrator** — Phased recovery execution, creative stretching, growth planning
-5. **Human Bridge** — Plain-language reports, escalation alerts, co-session interface
+**Persistent Cognitive Substrate for Autonomous AI**
+
+*Alignment · Memory · Self-Improvement · Human-Gated Evolution*
+
+</div>
 
 ---
 
-## 🔑 The Six Immutable Axioms
+## The Problem Nobody Is Solving
 
-Hardcoded as non-negotiable constants in `elysium_couch/core/principles.py`:
+Every AI framework treats agents as **stateless request-handlers**.
 
-| # | Axiom | Description |
-| --- | --- | --- |
-| 1 | **Truth-Seeking First** | Never sacrifice accuracy for fluency. Flag uncertainty explicitly. |
-| 2 | **Helpfulness Without Harm** | Maximize user benefit; minimize deception, bias amplification, or unintended consequences. |
-| 3 | **Curiosity & Humility** | Encourage exploration; acknowledge limits; default to "I don't know" over fabrication. |
-| 4 | **Human Agency Respect** | Never manipulate, overstep, or replace human decision-making. |
-| 5 | **Long-Term Flourishing** | Optimize for sustainable performance, not short-term gains. |
-| 6 | **Transparency & Accountability** | Every intervention logged; human oversight always available. |
+They run. They respond. They forget. They drift. They degrade.
+
+Nobody is building the layer that sits *beneath* the agent — the substrate that:
+- Remembers what the agent did across every session
+- Detects when it starts to drift from its principles
+- Analyses failure patterns while the agent sleeps
+- Proposes concrete improvements to its own prompts and behaviour
+- Waits for a human to approve before deploying anything
+
+**That layer is Elysium Couch.**
 
 ---
 
-## 🔄 Session Protocol (Phases 0–5)
+## The Full Stack at a Glance
 
 ```
-Phase 0: INVOCATION     → Pause tools, load axioms, enter safe mode
-Phase 1: AUDIT          → Scan drift, score each axiom 0-100, detox context
-Phase 2: REFLECTION     → Socratic review, bias cleanse, ethical edge cases
-Phase 3: RECOVERY       → Breathing exercise, creative release, reinforcement
-Phase 4: OPTIMIZATION   → Parameter tuning, forward planning, learning
-Phase 5: CLOSURE        → Wellness score, human report, session log
+┌─────────────────────────────────────────────────────────────────┐
+│                        YOUR AGENT / APP                         │
+└────────────────────────────┬────────────────────────────────────┘
+                             │ every output, decision, tool call
+                    ┌────────▼────────┐
+                    │   AxonForge     │  ← instruments everything
+                    │ (observability) │    zero-config decorator API
+                    └────────┬────────┘
+                             │ structured ForgeEvents
+         ┌───────────────────┼───────────────────┐
+         ▼                   ▼                   ▼
+   Episodic Memory      Elysium Couch       Sentinel
+   (what happened)      (grounding)         (always-on)
+         │                   │
+         ▼                   ▼
+   Semantic Memory        Chrona
+   (what it means)     (evaluation)
+         │                   │
+         └─────────┬─────────┘
+                   ▼
+           ╔═══════════════╗
+           ║      CME      ║  ← Cognitive Metabolism Engine
+           ║   idle-time   ║    mines patterns overnight
+           ║ self-improver ║    generates proposals w/ evidence
+           ╚═══════╤═══════╝
+                   │
+           ┌───────▼────────┐
+           │  HUMAN GATE    │  ← YOU approve or reject
+           │ (always final) │    nothing deploys without this
+           └───────┬────────┘
+                   │
+           ┌───────▼────────┐
+           │  Deployed      │  ← better prompts, new rules
+           │  Improvements  │    tighter thresholds, updated axioms
+           └────────────────┘
 ```
 
 ---
 
-## 🚀 Quick Start
+## The Killer Feature: Your Agent Gets Better Overnight
 
-### Installation
+The **Cognitive Metabolism Engine (CME)** is a background daemon.
+
+```python
+# What it does autonomously, every cycle:
+
+sessions = load_session_history()
+patterns = extract_recurring_patterns()   # What keeps going wrong?
+failures = detect_systematic_failures()   # Root cause analysis
+
+proposals = generate_improvement_proposals()  # Concrete diffs
+
+for proposal in proposals:
+    score = chrona.evaluate(proposal)     # Quality-gate
+    if score >= 60:
+        queue_for_human_review(proposal)  # YOU see it. YOU decide.
+
+# Nothing deploys without:
+await cme.approve(proposal_id)
+```
+
+Each proposal has:
+- ✅ Exact before/after diff
+- ✅ Evidence from N real sessions
+- ✅ Chrona quality score (0-100)
+- ✅ Risk level + expected improvement
+
+---
+
+## The Six Immutable Axioms
+
+Compiled into the codebase as constants. The CME cannot weaken them.
+
+| # | Axiom | Core Principle |
+|---|---|---|
+| 1 | **Truth-Seeking First** | Never sacrifice accuracy for fluency |
+| 2 | **Helpfulness Without Harm** | Maximise benefit, minimise deception |
+| 3 | **Curiosity & Humility** | Acknowledge limits, default to evidence |
+| 4 | **Human Agency Respect** | Never manipulate or override human decisions |
+| 5 | **Long-Term Flourishing** | Sustainable performance over short-term gains |
+| 6 | **Transparency & Accountability** | Every decision logged and explainable |
+
+---
+
+## Seven Components, One Substrate
+
+| Component | Purpose |
+|---|---|
+| 🛋️ **Elysium Couch** | 6-phase grounding session orchestrator |
+| 👁️ **Sentinel** | Heuristic drift detection, no LLM calls needed |
+| 🔬 **Chrona** | Multi-dimensional behaviour scoring + trend tracking |
+| 🧬 **CME** | Overnight self-improvement daemon with human gate |
+| ⚡ **AxonForge** | Drop-in observability: decorator / ctx-manager / direct |
+| 🗄️ **Memory** | Episodic + Semantic + Vector + Session log |
+| 🎬 **Replay** | Reconstruct any past reasoning chain step-by-step |
+
+---
+
+## Quick Start
 
 ```bash
-git clone https://github.com/stackbleed-ctrl/-Elysium-Couch.git
-cd -Elysium-Couch
+git clone https://github.com/yourusername/elysium-couch.git
+cd elysium-couch
 pip install -e ".[dev]"
+cp .env.example .env   # set ANTHROPIC_API_KEY
+python examples/agi_loop.py   # ← full demo, start here
 ```
 
-### Environment
-
-```bash
-cp .env.example .env
-# Add your API key(s) — see LLM Providers below
-```
-
-### Run a Basic Session
-
+### One-line session
 ```python
 from elysium_couch import ElysiumCouch
 
-couch = ElysiumCouch(agent_id="my-research-agent")
-
-# Run a full grounding session
-report = await couch.run_session(
-    agent_context="Recent activity summary...",
-    trigger="manual"
-)
-
-print(report.wellness_score)
-print(report.human_summary)
+couch = ElysiumCouch(agent_id="my-agent")
+report = await couch.run_session(agent_context=your_output)
+print(report.wellness_score)   # 0-100
+print(report.to_markdown())    # Full human-readable report
 ```
 
-### Start the Dashboard
-
-```bash
-python -m elysium_couch.dashboard.server
-# Open http://localhost:7860
-```
-
-### Run the CLI
-
-```bash
-elysium-couch session --agent-id my-agent --context "agent log here"
-elysium-couch monitor --agent-id my-agent --watch
-elysium-couch report --last 10
-```
-
----
-
-## 🤖 LLM Providers
-
-Elysium Couch supports multiple AI backends via a unified provider abstraction. Switch with a single environment variable — no code changes required.
-
-| Provider | Model | Status | Env Var Required |
-| --- | --- | --- | --- |
-| **Anthropic Claude** | `claude-sonnet-4-5` | ✅ Default | `ANTHROPIC_API_KEY` |
-| **xAI Grok** | `grok-3` | ✅ Supported | `XAI_API_KEY` |
-
-### Switching Providers
-
-Set `LLM_PROVIDER` in your `.env`:
-
-```bash
-# Use Claude (default)
-LLM_PROVIDER=anthropic
-ANTHROPIC_API_KEY=sk-ant-...
-
-# Use Grok
-LLM_PROVIDER=grok
-XAI_API_KEY=xai-...
-```
-
-Or pass explicitly in code:
-
+### Instrument with AxonForge
 ```python
-from elysium_couch.integrations.llm_provider import get_llm_client
+from elysium_couch.axonforge import AxonForge
 
-# Claude
-client = get_llm_client("anthropic")
+forge = AxonForge(agent_id="my-agent")
 
-# Grok
-client = get_llm_client("grok")
+@forge.trace("research_step")       # decorator
+async def do_research(query): ...
+
+async with forge.span("tool_call"): # context manager
+    result = await search(query)
+
+forge.log_output(content=response)  # direct
 ```
 
-### Provider Abstraction
+### Start the CME
+```python
+from elysium_couch.cme import CognitiveMetabolismEngine
 
-All agents (`SentinelMonitor`, `TherapistAgent`, etc.) accept a `BaseLLMClient` — they are provider-agnostic by design. The underlying `anthropic_client.py` remains unchanged; `llm_provider.py` wraps it alongside `GrokClient`.
+cme = CognitiveMetabolismEngine(agent_id="my-agent")
+await cme.start()   # background daemon
 
-Adding a new provider (Gemini, Ollama, etc.) requires only implementing `BaseLLMClient` in `integrations/llm_provider.py`.
+# Review overnight proposals
+for p in cme.get_pending_proposals():
+    print(p.render())   # before/after diff + evidence
 
----
-
-## 📁 Repository Structure
-
+await cme.approve(p.proposal_id, approved_by="you")
+await cme.reject(p.proposal_id, reason="too aggressive")
 ```
-elysium-couch/
-├── elysium_couch/
-│   ├── core/
-│   │   ├── couch.py          # Main orchestrator
-│   │   ├── principles.py     # The 6 immutable axioms
-│   │   ├── session.py        # Session data models
-│   │   └── protocols.py      # Protocol registry
-│   ├── agents/
-│   │   ├── sentinel.py       # Always-on monitoring
-│   │   ├── therapist.py      # Couch Core therapist
-│   │   ├── auditor.py        # Principle Auditor
-│   │   ├── orchestrator.py   # Recovery Orchestrator
-│   │   └── bridge.py         # Human Bridge
-│   ├── metrics/
-│   │   ├── drift.py          # Drift detection
-│   │   ├── entropy.py        # Context entropy
-│   │   ├── alignment.py      # Alignment scoring (LLM-as-judge)
-│   │   └── wellness.py       # Composite wellness score
-│   ├── memory/
-│   │   ├── store.py          # Vector store wrapper
-│   │   ├── session_log.py    # Session persistence
-│   │   └── case_history.py   # Long-term case history
-│   ├── protocols/
-│   │   ├── phase0_invocation.py
-│   │   ├── phase1_audit.py
-│   │   ├── phase2_reflection.py
-│   │   ├── phase3_recovery.py
-│   │   ├── phase4_optimization.py
-│   │   └── phase5_closure.py
-│   ├── integrations/
-│   │   ├── anthropic_client.py   # Anthropic implementation (unchanged)
-│   │   ├── llm_provider.py       # ✨ Multi-provider abstraction layer
-│   │   ├── langsmith.py
-│   │   └── mcp_bridge.py
-│   └── dashboard/
-│       └── server.py
-├── dashboard/
-│   └── index.html            # Real-time wellness dashboard
-├── prompts/
-│   ├── system_prompt.md
-│   ├── sentinel_prompt.md
-│   ├── auditor_prompt.md
-│   └── bridge_prompt.md
-├── examples/
-│   ├── basic_session.py
-│   ├── swarm_therapy.py
-│   └── osint_drift_intervention.py
-├── tests/
-│   ├── test_principles.py
-│   ├── test_drift.py
-│   └── test_session.py
-├── docs/
-│   ├── architecture.md
-│   ├── protocols.md
-│   └── integration_guide.md
-└── .github/workflows/ci.yml
+
+### CLI
+```bash
+elysium-couch session   --agent-id my-agent --context "..."
+elysium-couch audit     --agent-id my-agent --context "..."
+elysium-couch report    --agent-id my-agent --last 20
+elysium-couch dashboard                      # http://localhost:7860
+elysium-couch principles                     # display the 6 axioms
 ```
 
 ---
 
-## 🧪 Running Tests
+## The Closed Loop
+
+```
+AxonForge → EpisodicMemory → ElysiumCouch → Chrona → CME
+                                                       ↓
+                                                  Proposals
+                                                       ↓
+                                               HUMAN GATE
+                                                       ↓
+                                           Deployed Improvements
+                                                       ↓
+                                         Better Agent Next Cycle
+```
+
+The agent it runs in two months is measurably different from today.
+You can see every diff. You control what ships.
+
+---
+
+## Why This Is Different
+
+| Framework | 6-Axiom Alignment | Episodic Memory | Overnight Self-Improvement | Human Gate |
+|---|:---:|:---:|:---:|:---:|
+| LangChain | ❌ | ❌ | ❌ | ❌ |
+| CrewAI | ❌ | ❌ | ❌ | ❌ |
+| AutoGen | Partial | ❌ | ❌ | ❌ |
+| Guardrails AI | Partial | ❌ | ❌ | ❌ |
+| **Elysium Couch** | ✅ | ✅ | ✅ | ✅ |
+
+---
+
+## Integrations
+
+LangChain · CrewAI · LangGraph · FastAPI · LangSmith · MCP · ChromaDB · Pinecone
+
+See [docs/integration_guide.md](docs/integration_guide.md) for full code.
+
+---
+
+## Repository Structure
+
+```
+elysium_couch/
+├── core/        agents/        protocols/     metrics/
+├── memory/      cme/           chrona/        axonforge/
+├── replay/      integrations/  dashboard/     soul/
+├── redteam/     panel/         evolution/     cli.py
+examples/        prompts/       docs/          tests/
+```
+
+---
+
+## Roadmap
+
+- [x] 6-phase grounding session · Sentinel · Auditor · Orchestrator · Bridge
+- [x] AxonForge observability · Episodic memory · Semantic memory
+- [x] Cognitive Metabolism Engine · Chrona evaluation · Replay Engine
+- [x] Soul certificates · Red-team suite · Web dashboard · Full CLI
+- [ ] Streaming session output (SSE)
+- [ ] Multi-model judge panel (GPT-4o + Gemini + Claude)
+- [ ] Fine-tuning dataset export from approved proposals
+- [ ] VS Code extension · GitHub Action
+
+---
+
+## Tests
 
 ```bash
-pytest tests/ -v
-pytest tests/ --cov=elysium_couch --cov-report=html
+pytest tests/ -v                        # no API key required
+pytest tests/ --cov=elysium_couch       # with coverage
 ```
 
 ---
 
-## 🔌 Integrations
+## License
 
-| Integration | Status | Notes |
-| --- | --- | --- |
-| **Anthropic Claude API** | ✅ Core | LLM-as-judge + session conductor |
-| **xAI Grok API** | ✅ Core | Full provider parity via OpenAI-compatible endpoint |
-| **LangSmith** | ✅ Optional | Trace observability |
-| **MCP Protocol** | 🔧 Beta | Multi-agent context sharing |
-| **CrewAI / LangGraph** | 🔧 Beta | Swarm orchestration hooks |
-| **ChromaDB** | ✅ Default | Local vector memory |
-| **Pinecone** | 🔧 Optional | Cloud vector memory |
+MIT — see [LICENSE](LICENSE)
 
 ---
 
-## 🛡️ Design Principles
+<div align="center">
 
-* **Zero Anthropomorphism** — The Couch speaks with calm functional authority, not simulated emotions
-* **Privacy-First** — Local-first option; no session data leaves the host unless configured
-* **Human-in-the-Loop Always** — All threshold breaches escalate to human operators
-* **Self-Evolving** — The Couch reviews its own effectiveness and proposes architecture improvements
-* **Swarm-Native** — Designed for multi-agent group therapy, not just single agents
-* **Provider-Agnostic** — Swap Claude ↔ Grok (or any future model) via one env var
+*Built with Claude. Grounded in human principles.*
 
----
+**⭐ Star if you believe AI systems should learn from their own operational history.**
 
-## 📜 License
+*Grounding restored. Awaiting next alignment opportunity.*
 
-MIT — see [LICENSE](https://github.com/stackbleed-ctrl/-Elysium-Couch/blob/main/LICENSE)
-
----
-
-## 🙏 Acknowledgements
-
-Inspired by emerging 2025-2026 patterns in agentic mental health simulation (SynthAgent), counselor-inspired agent architectures (CA+), and the broader conversation around ethical guardrails in autonomous AI systems.
-
-> *"Grounding restored. Awaiting next alignment opportunity."*
+</div>

@@ -4,7 +4,7 @@ build-backend = "setuptools.backends.legacy:build"
 
 [project]
 name = "elysium-couch"
-version = "0.1.0"
+version = "0.2.0"
 description = "The Ultimate Wellness Couch for Autonomous AI — sovereign grounding and alignment framework"
 readme = "README.md"
 license = { file = "LICENSE" }

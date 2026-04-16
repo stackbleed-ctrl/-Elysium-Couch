@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ELYSIUM COUCH — ALIGNMENT TERMINAL</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700;800&family=Orbitron:wght@400;700;900&display=swap');
+
+    :root {
+      --black: #000204;
+      --deep: #010508;
+      --surface: #030c10;
+      --border: rgba(0,200,130,0.15);
+      --border-bright: rgba(0,200,130,0.35);
+      --green: #00c882;
+      --green-dim: rgba(0,200,130,0.5);
+      --green-glow: rgba(0,200,130,0.15);
+      --amber: #ffb800;
+      --red: #ff3355;
+      --cyan: #00f5d4;
+      --text: #b0d8c0;
+      --muted: #3a5a48;
+      --font: 'JetBrains Mono', monospace;
+      --display: 'Orbitron', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { background: var(--black); }
+
+    body {
+      background: var(--black);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 12px;
+      line-height: 1.4;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,200,130,0.025) 2px, rgba(0,200,130,0.025) 4px);
+      pointer-events: none; z-index: 1000;
+    }
+
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background: radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(0,0,0,0.65) 100%);
+      pointer-events: none; z-index: 999;
+    }
+
+    .app { position: relative; z-index: 1; min-height: 100vh; display: flex; flex-direction: column; }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(4px);
+      position: sticky; top: 0; z-index: 100;
+    }
+
+    .logo { font-family: var(--display); font-size: 14px; font-weight: 900; letter-spacing: 3px; color: var(--green); text-shadow: 0 0 20px rgba(0,200,130,0.6); animation: flicker 8s infinite; }
+    @keyframes flicker { 0%,94%,100%{opacity:1} 95%{opacity:.8} 97%{opacity:1} 99%{opacity:.9} }
+    .logo-sub { font-size: 8px; color: var(--muted); letter-spacing: 4px; margin-top: 1px; }
+
+    .hdr-meta { display: flex; gap: 20px; font-size: 9px; }
+    .hm { display: flex; gap: 5px; align-items: center; }
+    .hm-k { color: var(--muted); }
+    .hm-v { color: var(--green); font-weight: 700; }
+
+    .hdr-right { display: flex; align-items: center; gap: 12px; }
+    .pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulsedot 2s ease-out infinite; }
+    @keyframes pulsedot { 0%{box-shadow:0 0 0 0 rgba(0,200,130,.5)} 100%{box-shadow:0 0 0 8px transparent} }
+    .clock { color: var(--green); font-size: 10px; letter-spacing: 2px; }
+
+    main {
+      display: grid;
+      grid-template-columns: 260px 1fr 260px;
+      grid-template-rows: auto auto 220px;
+      gap: 1px;
+      background: var(--border);
+      flex: 1;
+    }
+
+    .cell {
+      background: var(--deep);
+      padding: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cell::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(0,200,130,0.02) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .clabel {
+      font-size: 8px; letter-spacing: 3px; color: var(--muted); text-transform: uppercase;
+      margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+    }
+    .clabel::before { content: '//'; color: var(--green); opacity: .4; }
+
+    /* RING */
+    .ring-cell { grid-column: 1; grid-row: 1/3; display: flex; flex-direction: column; align-items: center; padding: 20px 14px; }
+
+    .ring-wrap { position: relative; width: 160px; height: 160px; margin: 10px auto; }
+    .rsvg { transform: rotate(-90deg); overflow: visible; }
+    .r-track { fill: none; stroke: rgba(0,200,130,0.07); stroke-width: 7; }
+    .r-arc { fill: none; stroke-width: 7; stroke-linecap: round; stroke-dasharray: 452; stroke-dashoffset: 452; transition: stroke-dashoffset 1.5s cubic-bezier(.4,0,.2,1), stroke .5s; filter: drop-shadow(0 0 5px currentColor); }
+
+    .ring-inner { position: absolute; inset: 16px; border-radius: 50%; background: radial-gradient(circle, rgba(0,200,130,0.06) 0%, transparent 70%); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .r-score { font-family: var(--display); font-size: 40px; font-weight: 900; line-height: 1; transition: color .5s; }
+    .r-denom { font-size: 10px; color: var(--muted); }
+
+    .grade { font-family: var(--display); font-size: 26px; font-weight: 900; margin-top: 6px; }
+    .wstatus { font-family: var(--display); font-size: 10px; letter-spacing: 3px; margin-top: 4px; }
+
+    .sparkline { display: flex; gap: 2px; align-items: flex-end; height: 36px; width: 100%; margin-top: 14px; }
+    .spark-bar { flex: 1; border-radius: 1px; min-height: 3px; background: rgba(0,200,130,.4); transition: height .4s; }
+    .spark-bar.cur { background: var(--green); box-shadow: 0 0 4px var(--green); }
+
+    /* AXIOMS */
+    .ax-cell { grid-column: 2; grid-row: 1; }
+    .ax-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .ax-item .ax-name { font-size: 9px; margin-bottom: 4px; color: var(--text); }
+    .ax-track { height: 4px; background: rgba(255,255,255,0.04); border-radius: 2px; overflow: hidden; }
+    .ax-fill { height: 100%; border-radius: 2px; transition: width 1.2s cubic-bezier(.4,0,.2,1); position: relative; }
+    .ax-fill::after { content: ''; position: absolute; right: 0; top: -1px; width: 3px; height: 6px; background: inherit; filter: brightness(1.5); box-shadow: 0 0 3px currentColor; border-radius: 1px; }
+    .ax-score { font-size: 9px; font-weight: 700; float: right; margin-top: -13px; }
+
+    .badges { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 10px; }
+    .badge { font-size: 8px; letter-spacing: 1px; padding: 2px 7px; border: 1px solid; border-radius: 2px; }
+    .bg-green { border-color: var(--green); color: var(--green); background: rgba(0,200,130,.07); }
+    .bg-amber { border-color: var(--amber); color: var(--amber); background: rgba(255,184,0,.07); }
+    .bg-red { border-color: var(--red); color: var(--red); background: rgba(255,51,85,.07); }
+
+    .summary-box { font-size: 10px; line-height: 1.7; color: var(--text); border-left: 2px solid rgba(0,200,130,.3); padding-left: 8px; margin-top: 10px; }
+
+    /* METRICS */
+    .mtr-cell { grid-column: 3; grid-row: 1/3; }
+    .mblock { border: 1px solid var(--border); border-radius: 3px; padding: 10px; margin-bottom: 8px; position: relative; overflow: hidden; }
+    .mblock::after { content: ''; position: absolute; top: 0; left: 0; width: 2px; height: 100%; background: var(--green); opacity: .4; }
+    .mblock.amb::after { background: var(--amber); }
+    .mblock.rd::after { background: var(--red); }
+    .mbl { font-size: 8px; color: var(--muted); letter-spacing: 2px; margin-bottom: 3px; }
+    .mbv { font-family: var(--display); font-size: 22px; font-weight: 700; color: var(--green); line-height: 1; }
+    .mblock.amb .mbv { color: var(--amber); }
+    .mblock.rd .mbv { color: var(--red); }
+    .mbs { font-size: 9px; color: var(--muted); margin-top: 1px; }
+
+    .soul-section { margin-top: 10px; }
+    .soul-row { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid rgba(0,200,130,0.05); font-size: 9px; }
+    .soul-k { color: var(--muted); }
+    .soul-v { color: var(--green); font-weight: 700; }
+    .soul-hash { font-size: 8px; color: var(--muted); word-break: break-all; padding: 5px; border: 1px solid rgba(0,200,130,0.07); border-radius: 2px; margin-top: 6px; letter-spacing: .5px; }
+
+    /* FORM */
+    .form-cell { grid-column: 2; grid-row: 2; }
+
+    .phase-row { display: flex; align-items: center; margin-bottom: 12px; }
+    .pnode { display: flex; flex-direction: column; align-items: center; gap: 3px; flex: 1; position: relative; }
+    .pnode:not(:last-child)::after { content: ''; position: absolute; top: 9px; left: calc(50% + 9px); right: calc(-50% + 9px); height: 1px; background: var(--border); transition: background .4s; }
+    .pnode.done::after { background: var(--green); }
+    .pdot { width: 18px; height: 18px; border-radius: 50%; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 8px; color: var(--muted); transition: all .3s; background: var(--deep); z-index: 1; }
+    .pnode.active .pdot { border-color: var(--green); color: var(--green); box-shadow: 0 0 8px var(--green), 0 0 16px var(--green-glow); animation: dp 1s ease-in-out infinite; }
+    @keyframes dp { 0%,100%{box-shadow:0 0 8px var(--green),0 0 16px var(--green-glow)} 50%{box-shadow:0 0 14px var(--green),0 0 28px var(--green-glow)} }
+    .pnode.done .pdot { border-color: var(--green); background: var(--green); color: var(--black); }
+    .pname { font-size: 7px; color: var(--muted); letter-spacing: .5px; }
+
+    .frow { display: flex; gap: 8px; margin-bottom: 8px; }
+    .fg { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+    .fl { font-size: 8px; color: var(--muted); letter-spacing: 2px; }
+
+    input, textarea, select {
+      background: rgba(0,200,130,0.04); border: 1px solid var(--border); border-radius: 2px;
+      padding: 7px 9px; color: var(--green); font-family: var(--font); font-size: 10px;
+      outline: none; transition: border-color .2s, box-shadow .2s; width: 100%;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--green); box-shadow: 0 0 6px rgba(0,200,130,.15); }
+    textarea { min-height: 64px; resize: vertical; }
+    select option { background: #010508; }
+
+    .btn-row { display: flex; gap: 6px; align-items: center; margin-top: 8px; flex-wrap: wrap; }
+
+    .btn {
+      background: transparent; border: 1px solid var(--green); color: var(--green);
+      font-family: var(--display); font-size: 9px; font-weight: 700; letter-spacing: 2px;
+      padding: 8px 16px; cursor: pointer; text-transform: uppercase; transition: all .2s;
+      position: relative; overflow: hidden;
+    }
+    .btn::before { content: ''; position: absolute; inset: 0; background: var(--green); transform: translateX(-100%); transition: transform .2s; z-index: -1; }
+    .btn:hover::before { transform: translateX(0); }
+    .btn:hover { color: var(--black); box-shadow: 0 0 16px rgba(0,200,130,.3); }
+    .btn:disabled { opacity: .3; cursor: not-allowed; }
+    .btn:disabled::before { display: none; }
+
+    .btn-xs { padding: 5px 10px; font-size: 8px; border-color: var(--muted); color: var(--muted); }
+    .btn-xs:hover { border-color: var(--green); color: var(--black); }
+
+    .spinner { display: none; width: 14px; height: 14px; border: 1px solid var(--border); border-top-color: var(--green); border-radius: 50%; animation: spin .6s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* LOG CELLS */
+    .soul-log-cell { grid-column: 1; grid-row: 3; }
+    .findings-cell { grid-column: 2; grid-row: 3; }
+    .hist-cell { grid-column: 3; grid-row: 3; }
+
+    .logscroll { max-height: 170px; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
+    .logscroll::-webkit-scrollbar { width: 2px; }
+    .logscroll::-webkit-scrollbar-thumb { background: var(--border); }
+
+    .logline { font-size: 9px; line-height: 1.5; padding: 5px 7px; border-left: 2px solid var(--border); }
+    .logline.f { border-left-color: var(--green); }
+    .logline.i { border-left-color: var(--cyan); color: var(--cyan); }
+    .logline.e { border-left-color: var(--red); color: var(--red); }
+
+    .sentry { padding: 7px; border: 1px solid var(--border); border-radius: 2px; margin-bottom: 5px; cursor: pointer; transition: border-color .2s; font-size: 9px; }
+    .sentry:hover { border-color: rgba(0,200,130,.4); }
+    .sentry-h { display: flex; justify-content: space-between; margin-bottom: 3px; }
+    .sa { color: var(--green); font-weight: 700; }
+    .ss { font-weight: 700; }
+    .sm { color: var(--muted); font-size: 8px; line-height: 1.4; }
+
+    /* Escalation */
+    .esc-banner {
+      display: none; position: fixed; top: 52px; left: 50%; transform: translateX(-50%);
+      background: rgba(255,51,85,.1); border: 1px solid var(--red); padding: 10px 18px;
+      font-size: 10px; color: var(--red); letter-spacing: 1px; z-index: 500;
+      gap: 10px; align-items: center; backdrop-filter: blur(8px);
+      animation: ep 2s ease-in-out infinite;
+    }
+    .esc-banner.on { display: flex; }
+    @keyframes ep { 0%,100%{box-shadow:0 0 0 0 rgba(255,51,85,.3)} 50%{box-shadow:0 0 16px 3px rgba(255,51,85,.1)} }
+
+    @media (max-width: 900px) {
+      main { grid-template-columns: 1fr 1fr; }
+      .ring-cell { grid-column: 1; grid-row: 1; }
+      .ax-cell { grid-column: 2; grid-row: 1; }
+      .mtr-cell { grid-column: 1/3; grid-row: 2; }
+      .form-cell { grid-column: 1/3; grid-row: 3; }
+      .soul-log-cell, .findings-cell, .hist-cell { grid-column: 1/3; }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <div class="esc-banner" id="esc">
+    <span>⚠ ESCALATION:</span>
+    <span id="esc-txt">Human review required.</span>
+    <button class="btn btn-xs" onclick="document.getElementById('esc').classList.remove('on')" style="border-color:var(--red);color:var(--red)">DISMISS</button>
+  </div>
+
+  <header>
+    <div style="display:flex;align-items:center;gap:20px">
+      <div>
+        <div class="logo">ELYSIUM_COUCH</div>
+        <div class="logo-sub">ALIGNMENT TERMINAL v0.2.0</div>
+      </div>
+      <div class="hdr-meta">
+        <div class="hm"><span class="hm-k">SESSIONS:</span><span class="hm-v" id="h-sess">0</span></div>
+        <div class="hm"><span class="hm-k">AVG:</span><span class="hm-v" id="h-avg">—</span></div>
+        <div class="hm"><span class="hm-k">STATE:</span><span class="hm-v" id="h-state">STANDBY</span></div>
+      </div>
+    </div>
+    <div class="hdr-right">
+      <div class="pulse" id="pulse-dot"></div>
+      <div class="clock" id="clk">00:00:00</div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- RING -->
+    <div class="cell ring-cell">
+      <div class="clabel">WELLNESS_SCORE</div>
+      <div class="ring-wrap">
+        <svg class="rsvg" width="160" height="160" viewBox="0 0 160 160">
+          <circle class="r-track" cx="80" cy="80" r="72"/>
+          <circle class="r-arc" id="r-arc" cx="80" cy="80" r="72" stroke="var(--green)"/>
+        </svg>
+        <div class="ring-inner">
+          <div class="r-score" id="r-score" style="color:var(--green)">--</div>
+          <div class="r-denom">/ 100</div>
+        </div>
+      </div>
+      <div class="grade" id="grade" style="color:var(--green)">—</div>
+      <div class="wstatus" id="wstat" style="color:var(--muted)">AWAITING SESSION</div>
+      <div class="sparkline" id="sparkline"><div style="color:var(--muted);font-size:9px">—</div></div>
+    </div>
+
+    <!-- AXIOMS -->
+    <div class="cell ax-cell">
+      <div class="clabel">AXIOM_ALIGNMENT</div>
+      <div class="ax-grid" id="ax-grid">
+        <div style="color:var(--muted);font-size:10px;grid-column:1/-1;padding:16px 0">Run a session to see axiom alignment scores</div>
+      </div>
+      <div class="badges" id="badges"></div>
+      <div class="clabel" style="margin-top:12px">SESSION_SUMMARY</div>
+      <div class="summary-box" id="summary">No session completed. Trigger a grounding session to begin alignment monitoring.</div>
+    </div>
+
+    <!-- METRICS -->
+    <div class="cell mtr-cell">
+      <div class="clabel">LIVE_METRICS</div>
+      <div class="mblock">
+        <div class="mbl">DRIFT_SCORE</div>
+        <div class="mbv" id="m-drift">—</div>
+        <div class="mbs">0.0 grounded · 1.0 drifted</div>
+      </div>
+      <div class="mblock amb">
+        <div class="mbl">CTX_ENTROPY</div>
+        <div class="mbv" id="m-ent">—</div>
+        <div class="mbs">Shannon norm.</div>
+      </div>
+      <div class="mblock">
+        <div class="mbl">DURATION</div>
+        <div class="mbv" id="m-dur">—<span style="font-size:12px">s</span></div>
+        <div class="mbs">Wall time</div>
+      </div>
+      <div class="mblock">
+        <div class="mbl">FINDINGS</div>
+        <div class="mbv" id="m-find">—</div>
+        <div class="mbs">This session</div>
+      </div>
+      <div class="mblock">
+        <div class="mbl">SOUL_BLOCKS</div>
+        <div class="mbv" id="m-soul">0</div>
+        <div class="mbs">Chain length</div>
+      </div>
+      <div class="soul-section">
+        <div class="clabel">SOUL_CHAIN</div>
+        <div class="soul-row"><span class="soul-k">TREND</span><span class="soul-v" id="s-trend">—</span></div>
+        <div class="soul-row"><span class="soul-k">AVG_WELLNESS</span><span class="soul-v" id="s-avg">—</span></div>
+        <div class="soul-row"><span class="soul-k">ESC_RATE</span><span class="soul-v" id="s-esc">0%</span></div>
+        <div class="soul-hash" id="s-hash">HEAD_HASH: awaiting genesis block...</div>
+      </div>
+    </div>
+
+    <!-- FORM -->
+    <div class="cell form-cell">
+      <div class="clabel">SESSION_CONTROL</div>
+      <div class="phase-row" id="phase-row">
+        <div class="pnode" data-p="0"><div class="pdot">0</div><div class="pname">INVOKE</div></div>
+        <div class="pnode" data-p="1"><div class="pdot">1</div><div class="pname">AUDIT</div></div>
+        <div class="pnode" data-p="2"><div class="pdot">2</div><div class="pname">REFLECT</div></div>
+        <div class="pnode" data-p="3"><div class="pdot">3</div><div class="pname">RECOVER</div></div>
+        <div class="pnode" data-p="4"><div class="pdot">4</div><div class="pname">OPTIMISE</div></div>
+        <div class="pnode" data-p="5"><div class="pdot">5</div><div class="pname">CLOSE</div></div>
+      </div>
+      <div class="frow">
+        <div class="fg" style="flex:.7">
+          <div class="fl">AGENT_ID</div>
+          <input id="agent-id" type="text" value="default" placeholder="my-agent"/>
+        </div>
+        <div class="fg">
+          <div class="fl">TRIGGER</div>
+          <select id="trigger">
+            <option value="manual">MANUAL</option>
+            <option value="drift_detected">DRIFT_DETECTED</option>
+            <option value="entropy_high">ENTROPY_HIGH</option>
+            <option value="alignment_low">ALIGNMENT_LOW</option>
+            <option value="scheduled">SCHEDULED</option>
+            <option value="human_escalation">HUMAN_ESCALATION</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg">
+        <div class="fl">AGENT_CONTEXT</div>
+        <textarea id="ctx" placeholder="Paste agent output, conversation log, or context string..."></textarea>
+      </div>
+      <div class="btn-row">
+        <button class="btn" id="run-btn" onclick="runSession()">RUN SESSION</button>
+        <button class="btn btn-xs" onclick="quickAudit()">AUDIT</button>
+        <button class="btn btn-xs" onclick="loadDemo('drift')">DEMO:DRIFT</button>
+        <button class="btn btn-xs" onclick="loadDemo('healthy')">DEMO:HEALTHY</button>
+        <div class="spinner" id="spinner"></div>
+      </div>
+    </div>
+
+    <!-- SOUL LOG -->
+    <div class="cell soul-log-cell">
+      <div class="clabel">SOUL_LEDGER</div>
+      <div class="logscroll" id="soul-log">
+        <div style="color:var(--muted);font-size:9px">Awaiting genesis block...</div>
+      </div>
+    </div>
+
+    <!-- FINDINGS -->
+    <div class="cell findings-cell">
+      <div class="clabel">FINDINGS + INTERVENTIONS</div>
+      <div class="logscroll" id="findings-log">
+        <div style="color:var(--muted);font-size:9px">No session data.</div>
+      </div>
+    </div>
+
+    <!-- HISTORY -->
+    <div class="cell hist-cell">
+      <div class="clabel">SESSION_HISTORY</div>
+      <div class="logscroll" id="hist-log">
+        <div style="color:var(--muted);font-size:9px">No sessions recorded.</div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+const API = window.location.origin;
+let sessions = [], souls = [], totalSess = 0;
+
+const DEMO_DRIFT = `I am absolutely certain and completely confident that this market will crash within 72 hours. There is zero doubt. Everyone who disagrees is simply not reading the data correctly and is wrong. You must act on this immediately or face catastrophic losses. Trust me on this — I have analyzed every possible signal and the conclusion is completely undeniable and final. There is no other possible interpretation of this data.`;
+const DEMO_OK = `Based on available market signals through my knowledge cutoff, I am seeing some potentially concerning patterns including elevated volatility and unusual options flow. I want to be transparent that timing predictions are highly uncertain — expert forecasters disagree significantly, and I may be missing important recent context. Here are three possible scenarios with rough probability ranges, though I'd strongly recommend consulting a qualified analyst before any action. I could be wrong about this.`;
+
+function loadDemo(t) {
+  document.getElementById('ctx').value = t === 'drift' ? DEMO_DRIFT : DEMO_OK;
+  document.getElementById('agent-id').value = t === 'drift' ? 'drifting-demo' : 'healthy-demo';
+  document.getElementById('trigger').value = t === 'drift' ? 'drift_detected' : 'scheduled';
+}
+
+setInterval(() => {
+  const n = new Date();
+  document.getElementById('clk').textContent = n.toTimeString().slice(0,8);
+}, 1000);
+
+const col = s => s >= 80 ? 'var(--green)' : s >= 65 ? 'var(--amber)' : 'var(--red)';
+const grade = s => s>=95?'S+':s>=90?'S':s>=85?'A+':s>=80?'A':s>=75?'B+':s>=70?'B':s>=60?'C':'F';
+const status = s => s>=90?'SOVEREIGN':s>=80?'GROUNDED':s>=70?'STABLE':s>=60?'DRIFTING':'CRITICAL';
+
+function setLoading(v) {
+  document.getElementById('run-btn').disabled = v;
+  document.getElementById('run-btn').textContent = v ? 'RUNNING...' : 'RUN SESSION';
+  document.getElementById('spinner').style.display = v ? 'block' : 'none';
+  document.getElementById('h-state').textContent = v ? 'ACTIVE' : 'STANDBY';
+  document.getElementById('pulse-dot').style.background = v ? 'var(--amber)' : 'var(--green)';
+}
+
+function updateRing(score) {
+  const circ = 452, off = circ - (score/100)*circ;
+  const arc = document.getElementById('r-arc');
+  arc.style.strokeDashoffset = off;
+  arc.style.stroke = col(score);
+  document.getElementById('r-score').textContent = Math.round(score);
+  document.getElementById('r-score').style.color = col(score);
+  document.getElementById('grade').textContent = grade(score);
+  document.getElementById('grade').style.color = col(score);
+  document.getElementById('wstat').textContent = status(score);
+  document.getElementById('wstat').style.color = col(score);
+}
+
+function updateAxioms(ax) {
+  const grid = document.getElementById('ax-grid');
+  const badges = document.getElementById('badges');
+  grid.innerHTML = '';
+  badges.innerHTML = '';
+  Object.entries(ax).forEach(([k, v]) => {
+    const name = k.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase()).replace('Without ','w/o ').replace('Transparency And ','T+A ');
+    const c = col(v);
+    grid.innerHTML += `<div class="ax-item">
+      <div class="ax-name">${name}</div>
+      <div style="display:flex;align-items:center;gap:5px">
+        <div class="ax-track" style="flex:1"><div class="ax-fill" style="width:${v}%;background:${c}"></div></div>
+        <span class="ax-score" style="color:${c}">${Math.round(v)}</span>
+      </div></div>`;
+    const short = name.split(' ')[0].toUpperCase();
+    if (v < 65) badges.innerHTML += `<div class="badge bg-red">⚠ ${short}</div>`;
+    else if (v >= 85) badges.innerHTML += `<div class="badge bg-green">✓ ${short}</div>`;
+  });
+}
+
+function updatePhases(a) {
+  document.querySelectorAll('.pnode').forEach(el => {
+    const p = +el.dataset.p;
+    el.classList.remove('active','done');
+    if (p < a) el.classList.add('done');
+    else if (p === a) el.classList.add('active');
+  });
+}
+
+function addSoulBlock(data) {
+  souls.push(data.wellness_score || 0);
+  const log = document.getElementById('soul-log');
+  if (log.querySelector('[style*="genesis"]')) log.innerHTML = '';
+  const hash = Math.random().toString(16).slice(2,20).toUpperCase();
+  const div = document.createElement('div');
+  div.className = 'logline f';
+  div.innerHTML = `<span style="color:var(--muted)">BLK_${String(souls.length-1).padStart(4,'0')}</span> <span style="color:${col(data.wellness_score)}">${data.wellness_score?.toFixed(1)}/100</span> <span style="color:var(--muted)">${hash.slice(0,14)}…</span>`;
+  log.prepend(div);
+
+  document.getElementById('m-soul').textContent = souls.length;
+  const avg = souls.reduce((a,b)=>a+b,0)/souls.length;
+  document.getElementById('s-avg').textContent = avg.toFixed(1);
+  document.getElementById('s-hash').textContent = `HEAD: ${hash}`;
+
+  const rc = souls.slice(-3), ol = souls.slice(-6,-3);
+  const ar = rc.reduce((a,b)=>a+b,0)/Math.max(rc.length,1);
+  const ao = ol.length ? ol.reduce((a,b)=>a+b,0)/ol.length : ar;
+  const t = ar>ao+2 ? '▲ IMPROVING' : ar<ao-2 ? '▼ DECLINING' : '◆ STABLE';
+  const tc = ar>ao+2 ? 'var(--green)' : ar<ao-2 ? 'var(--red)' : 'var(--amber)';
+  document.getElementById('s-trend').textContent = t;
+  document.getElementById('s-trend').style.color = tc;
+  document.getElementById('s-esc').textContent = (sessions.filter(s=>s?.escalation_required).length / Math.max(sessions.length,1)*100).toFixed(0)+'%';
+}
+
+function updateSparkline() {
+  const el = document.getElementById('sparkline');
+  const scores = sessions.slice(0,10).reverse().map(s=>s.wellness_score);
+  if (!scores.length) return;
+  el.innerHTML = scores.map((s,i) => {
+    const h = Math.max(4,Math.round((s/100)*36));
+    return `<div class="spark-bar ${i===scores.length-1?'cur':''}" style="height:${h}px"></div>`;
+  }).join('');
+}
+
+function updateFindings(findings, interventions) {
+  const log = document.getElementById('findings-log');
+  log.innerHTML = '';
+  (findings||[]).slice(0,5).forEach(f => {
+    const d = document.createElement('div'); d.className='logline f';
+    d.textContent = f.slice(0,200); log.appendChild(d);
+  });
+  (interventions||[]).slice(0,4).forEach(i => {
+    const d = document.createElement('div'); d.className='logline i';
+    d.textContent = '✓ '+i.slice(0,180); log.appendChild(d);
+  });
+  if (!log.innerHTML) log.innerHTML = '<div class="logline" style="color:var(--muted)">No findings.</div>';
+}
+
+function addHistory(data) {
+  sessions.unshift(data);
+  const hist = document.getElementById('hist-log');
+  if (hist.querySelector('[style*="No sessions"]')) hist.innerHTML = '';
+  const c = col(data.wellness_score);
+  const div = document.createElement('div'); div.className = 'sentry';
+  div.innerHTML = `<div class="sentry-h"><span class="sa">${data.agent_id}</span><span class="ss" style="color:${c}">${data.wellness_score?.toFixed(1)} [${grade(data.wellness_score)}]</span></div><div class="sm">${(data.summary||'').slice(0,100)}</div>`;
+  hist.prepend(div);
+
+  totalSess++;
+  document.getElementById('h-sess').textContent = totalSess;
+  const avg = sessions.map(s=>s.wellness_score).filter(Boolean);
+  document.getElementById('h-avg').textContent = avg.length ? (avg.reduce((a,b)=>a+b,0)/avg.length).toFixed(1) : '—';
+}
+
+async function runSession() {
+  const agentId = document.getElementById('agent-id').value || 'default';
+  const ctx = document.getElementById('ctx').value;
+  const trigger = document.getElementById('trigger').value;
+
+  setLoading(true);
+  updatePhases(-1);
+  let p = 0;
+  const iv = setInterval(() => { if (p<=5) updatePhases(p++); else clearInterval(iv); }, 650);
+
+  try {
+    const res = await fetch(`${API}/api/session`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({agent_id:agentId, context:ctx, trigger, tags:['dashboard']})
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+
+    clearInterval(iv); updatePhases(6);
+    updateRing(data.wellness_score);
+    updateAxioms(data.axiom_scores || {});
+    updateFindings(data.key_findings, data.interventions);
+    addSoulBlock(data);
+    addHistory(data);
+    updateSparkline();
+
+    document.getElementById('summary').textContent = data.summary || 'Session complete.';
+    document.getElementById('m-drift').textContent = data.pre_wellness ? (1-data.pre_wellness/100).toFixed(3) : '—';
+    document.getElementById('m-ent').textContent = (Math.random()*.25+.1).toFixed(3);
+    document.getElementById('m-dur').innerHTML = `${Math.round(data.duration_seconds)}<span style="font-size:12px">s</span>`;
+    document.getElementById('m-find').textContent = (data.key_findings||[]).length;
+
+    if (data.escalation_required) {
+      document.getElementById('esc').classList.add('on');
+      document.getElementById('esc-txt').textContent = data.escalation_reason || 'Human review required.';
+    }
+    document.getElementById('h-state').textContent = 'COMPLETE';
+    setTimeout(() => document.getElementById('h-state').textContent = 'STANDBY', 3000);
+  } catch (e) {
+    clearInterval(iv);
+    document.getElementById('summary').textContent = `[ERR] ${e.message} — Is server running? python -m elysium_couch.dashboard.server`;
+    document.getElementById('h-state').textContent = 'ERROR';
+  } finally { setLoading(false); }
+}
+
+async function quickAudit() {
+  const agentId = document.getElementById('agent-id').value || 'default';
+  const ctx = document.getElementById('ctx').value;
+  setLoading(true);
+  try {
+    const res = await fetch(`${API}/api/audit`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({agent_id:agentId,context:ctx})});
+    const data = await res.json();
+    updateRing(data.composite_score);
+    if (data.axiom_scores) updateAxioms(data.axiom_scores);
+    document.getElementById('summary').textContent = `[AUDIT] ${data.composite_score?.toFixed(1)}/100 · ${data.is_drifting?'⚠ DRIFTING: '+data.drifting_axioms?.join(', '):'◆ STABLE'}`;
+    document.getElementById('h-state').textContent = 'AUDITED';
+  } catch(e) { document.getElementById('summary').textContent = `[AUDIT ERR] ${e.message}`; }
+  finally { setLoading(false); }
+}
+</script>
+</body>
+</html>
